@@ -20,12 +20,23 @@ int main (void)
 	stop();
 	//Serial0_config(115200, SERIAL_8N1);
 	setSpeed(99);
+	
 	while(1)
 	{
+		Serial0_config(115200, SERIAL_8N1);
+		char held[100];
+		sprintf(held, "Left: %d Right: %d", getLeftRotaryCount(), getRightRotaryCount());
+		Serial0_poll_print(held);
+		_delay_ms(5000);
+	}
+	while(1)
+	{
+		/*
 		goStraightDistance(200, 1);
 		_delay_ms(2000);
 		goStraightDistance(200, 0);
 		_delay_ms(2000);
+		*/
 	}
 	
 	while(1)

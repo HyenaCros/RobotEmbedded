@@ -15,21 +15,29 @@
 volatile int right;
 volatile int left;
 
-volatile char PCINT0_STATE = 0;
+volatile char PCINT1_STATE = 0;
 ISR(PCINT1_vect) {	
 	
 	char CURRENT_STATE = PINJ;
-	char changed = CURRENT_STATE ^ PCINT0_STATE;
+	char changed = CURRENT_STATE ^ PCINT1_STATE;
 	
-    if (PINJ & 0x01 && changed == 0x01)
+    if ((CURRENT_STATE&0x01)==0x01 && (changed&0x01) == 0x01)
 	{ 
 		right++;
 	}
-    if (PINJ & 0x02 && changed == 0x02)
+    if ((CURRENT_STATE&0x02)==0x02 && (changed&0x02) == 0x02)
 	{
 		left++;
 	}
-	PCINT0_STATE = CURRENT_STATE;
+	/*
+	Serial0_config(115200, SERIAL_8N1);
+	char held[5];
+	//sprintf(held, "Left: %d Right: %d Current State: %x Changed: %x\n", left, right, CURRENT_STATE, changed);
+	sprintf(held, "%d", left);
+	Serial0_poll_print(held);
+	_delay_ms(500);
+	*/
+	PCINT1_STATE = CURRENT_STATE;
 }
 
 void RotarySetup()
