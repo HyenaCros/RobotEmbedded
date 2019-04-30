@@ -107,6 +107,7 @@
   <avrgcc.linker.libraries.LibrarySearchPaths>
     <ListValues>
       <Value>C:\Users\chaserony\Desktop\WheelDriver\WheelDriver\acx</Value>
+      <Value>C:\Users\kirbysf\Desktop\RobotEmbedded-master\RobotEmbedded-master\WheelDriver\acx</Value>
     </ListValues>
   </avrgcc.linker.libraries.LibrarySearchPaths>
   <avrgcc.linker.miscellaneous.LinkerFlags>-Wl,--relax</avrgcc.linker.miscellaneous.LinkerFlags>
@@ -174,6 +175,7 @@
     <ListValues>
       <Value>../../../../acx</Value>
       <Value>C:\Users\chaserony\Desktop\WheelDriver\WheelDriver\acx</Value>
+      <Value>C:\Users\kirbysf\Desktop\RobotEmbedded-master\RobotEmbedded-master\WheelDriver\acx</Value>
     </ListValues>
   </avrgcc.linker.libraries.LibrarySearchPaths>
   <avrgcc.linker.miscellaneous.LinkerFlags>-Wl,--relax</avrgcc.linker.miscellaneous.LinkerFlags>
@@ -215,6 +217,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\acxserial.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\IRsensor.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\IRsensor.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\MotorControls.c">
