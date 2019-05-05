@@ -19,29 +19,53 @@ int main (void)
 	RotarySetup();
 	//IRsetup();
 	
+// 	while(1)
+// 	{
+// 		goForwards();
+// 		setSpeed(90);
+// 	}
 	
 	
-	
-	stop();
+	//stop();
 	//Serial0_config(115200, SERIAL_8N1);
-	setSpeed(50);
+	//setSpeed(50);
 	
 	/*Testing for pivoting finding object*/
-	
-	bool seeObject = false;
-	setSpeed(50);
-	leftForwardsRightBack();
-	while(seeObject == false)
+// 	while(1)
+// 	{
+// 		ultraSonicObservers();
+// 		Serial0_config(115200, SERIAL_8N1);
+// 		char held[100];
+// 		int left = getDistanceLeft();
+// 		int right = getDistanceRight();
+// 		sprintf(held, "Left: %d Right: %d", left, right);
+// 		Serial0_poll_print(held);
+// 		_delay_ms(5000);
+// 	}
+
+// 	
+	while(1)
 	{
-		ultraSonicObservers();
-		int distance_l = getDistanceLeft();
-		int distance_r = getDistanceRight();
-		if(distance_l < 5 || distance_r < 5)
+		bool seeObject = false;
+		setSpeed(99);
+		leftForwardsRightBack();
+		
+		while(seeObject == false)
 		{
-			stop();
-			seeObject = true;
-		}	
+			ultraSonicObservers();
+			//_delay_ms(100);
+			int left = getDistanceLeft();
+			int right = getDistanceRight();
+			if((left < 5 && left > 0))
+			{
+				stop();
+				seeObject = true;
+				_delay_ms(1000);
+			}
+		}
+   
 	}
+	
 
 //Go Straight 8ft (open loop)
 	
@@ -78,86 +102,4 @@ int main (void)
 // 		stop();
 // 		_delay_ms(10000);
 // 	}	
-	
-
-//Automous Driving 
-	
-	while(1)
-	{
-		ultraSonicObservers();
-		int distanceLeft = getDistanceLeft();
-		int distanceRight = getDistanceRight();
-		
-		if(distanceLeft >= 0 && distanceLeft <= 2 && distanceRight >= 0 && distanceRight <= 1)
-		{
-			stop();
-			_delay_ms(800);
-			TurnDegrees(45, 1);
-		}
-		
-		//Turn Right
-		else if(distanceLeft >= 0 && distanceLeft <= 2)
-		{
-			stop();
-			_delay_ms(800);
-			goStraightDistance(20, 0);
-			TurnDegrees(90, 0);		
-		}
-		
-		else if(distanceRight >= 0 && distanceRight <= 2)
-		{
-			stop();
-			_delay_ms(800);
-			goStraightDistance(20, 0);
-			TurnDegrees(90, 1);
-		}
-		
-		else
-		{
-			//Both no sensing
-			if(distanceRight < 0 && distanceRight < 0)
-			{
-				stop();
-				_delay_ms(800);
-				goForwards();
-				goStraightDistance(40, 1);
-			}
-			
-			//Right is farther than left
-			//Turn Right
-			else if(distanceLeft > 0 && distanceRight < 0)
-			{
-				stop();
-				_delay_ms(800);
-				RadiusTurn(120, 10, 0);
-			}
-			//Left is farther than right
-			//Turn Left
-			else if(distanceLeft < 0 && distanceRight > 0)
-			{
-				stop();
-				_delay_ms(800);
-				RadiusTurn(120, 10, 1);
-			}
-			//Left is farther than right
-			//Turn left
-			else if(distanceLeft > distanceRight)
-			{
-				stop();
-				_delay_ms(800);
-				RadiusTurn(120, 10, 0);
-			}
-			//Right is farther than left
-			//Turn right
-			else if(distanceRight > distanceLeft)
-			{
-				stop();
-				_delay_ms(800);
-				RadiusTurn(120, 10, 1);
-			}
-		}
-		
-	}
-	
-	
 }
