@@ -66,18 +66,24 @@ void IRrun()
 	if(leftTape==1 && rightTape==1)
 	{
 		stop();
-		_delay_ms(1000);
+		_delay_ms(3000);
 	}
 	else if(leftTape)
 	{
 		stop();
-		_delay_ms(1000);
-		TurnDegrees(15, 1);
+		_delay_ms(100);
+		rightForwardsLeftBack()
+		_delay_ms(100);
+		stop();
+		//TurnDegrees(15, 1);
 	}
 	else if (rightTape)
 	{
 		stop();
-		_delay_ms(1000);
+		_delay_ms(100);
+		leftForwardsRightBack()
+		_delay_ms(100);
+		stop();
 		TurnDegrees(15, 0);
 	}
 	else

@@ -17,7 +17,7 @@ int main (void)
 	setUpUltraSonic();
 	wheelSetup();
 	RotarySetup();
-	//IRsetup();
+	IRsetup();
 	
 // 	while(1)
 // 	{
