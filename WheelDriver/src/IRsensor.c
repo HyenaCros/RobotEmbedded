@@ -72,7 +72,7 @@ void IRrun()
 	{
 		stop();
 		_delay_ms(100);
-		rightForwardsLeftBack()
+		rightForwardsLeftBack();
 		_delay_ms(100);
 		stop();
 		//TurnDegrees(15, 1);
@@ -81,7 +81,7 @@ void IRrun()
 	{
 		stop();
 		_delay_ms(100);
-		leftForwardsRightBack()
+		leftForwardsRightBack();
 		_delay_ms(100);
 		stop();
 		TurnDegrees(15, 0);
