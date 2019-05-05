@@ -19,9 +19,29 @@ int main (void)
 	RotarySetup();
 	//IRsetup();
 	
+	
+	
+	
 	stop();
 	//Serial0_config(115200, SERIAL_8N1);
 	setSpeed(50);
+	
+	/*Testing for pivoting finding object*/
+	
+	bool seeObject = false;
+	setSpeed(50);
+	leftForwardsRightBack();
+	while(seeObject == false)
+	{
+		ultraSonicObservers();
+		int distance_l = getDistanceLeft();
+		int distance_r = getDistanceRight();
+		if(distance_l < 5 || distance_r < 5)
+		{
+			stop();
+			seeObject = true;
+		}	
+	}
 
 //Go Straight 8ft (open loop)
 	
