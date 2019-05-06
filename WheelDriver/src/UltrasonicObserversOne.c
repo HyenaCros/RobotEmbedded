@@ -2,7 +2,7 @@
  * UltrasonicObservers.c
  *
  * Created: 4/16/2019 3:13:00 PM
- *  Author: colea
+ *  Author: colea, kimbroughd
  */ 
 #include "UltrasonicObservers.h"
 #include <stdio.h>
@@ -15,11 +15,10 @@
 static volatile double distance = 0;
 static volatile int pulse = 0;
 static volatile int senseInc = 0;
-
+volatile char PCINT2_STATE = 0;
 static volatile int avg_count = 0;
 
 static volatile double avgSense = 0;
-static volatile int ovfTime = 0;
 
 
 double getDistance()
@@ -30,30 +29,35 @@ double getDistance()
 
 ISR(PCINT2_vect)//interrupt service routine when there is a change in logic level
 {
-		
-		if (rightInc==1)//when logic from HIGH to LOW
+	char CURRENT_STATE = PINK;
+	char changed = CURRENT_STATE ^ PCINT2_STATE;
+	if(changed == 2)
+	{
+		if ((CURRENT_STATE & 2)==2)//when logic from HIGH to LOW
 		{
 			TCCR4B=0;//disabling counter
-			pulse=TCNT4;//count memory is updated to integer
+			rightPulse=TCNT4;//count memory is updated to integer
 			
-			distance = (pulse/148)/14;
-			avg += right;
-			avg_count++;
-			if (avg_count == 5) {
-				distance = avg / 5;
-				avg_count = 0;
-				avg = 0;
+			distanceRight = (rightPulse/148)/14;
+			avgR += distanceRight;
+			avg_countR++;
+			if (avg_countR == 5) {
+				distanceRight = avgR / 5;
+				avg_countR = 0;
+				avgR = 0;
 			}
 			
 			TCNT4=0;//resetting the counter memory
-			senseInc=0;
 		}
 
-		if (senseInc==0)//when logic change from LOW to HIGH
+		if ((CURRENT_STATE & 2)==2)//when logic change from LOW to HIGH
 		{
 			TCCR4B |= 1;//enabling counter
-			senseInc=1;
+
 		}
+	}
+	
+	PCINT2_STATE = CURRENT_STATE;
 }
 
 void setUpUltraSonic()
@@ -73,8 +77,8 @@ void setUpUltraSonic()
 	//Enable Interrupt 2
 	PCICR |= 0x04;
 	
-	//Set A8 A9 as Interrupt pins
-	PCMSK2 |= 0x01;	
+	//Set A9 as Interrupt pins
+	PCMSK2 |= 0x02;	
 	
 	TCCR4A = 0;
 	
@@ -90,7 +94,3 @@ void ultraSonicObservers()
 		_delay_ms(2);
 	}
 }
-/*ISR(TIMER1_OVF_vect)
-{
-	ovfTime++;
-}*/
