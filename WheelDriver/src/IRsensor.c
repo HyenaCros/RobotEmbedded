@@ -63,6 +63,7 @@ ISR(PCINT0_vect)
 
 void IRrun()
 {
+	setSpeed(90);
 	if(leftTape==1 && rightTape==1)
 	{
 		stop();
@@ -72,7 +73,8 @@ void IRrun()
 	{
 		stop();
 		_delay_ms(100);
-		rightForwardsLeftBack();
+		onlyLeftForwards();
+		setSpeed(80);
 		_delay_ms(100);
 		stop();
 		//TurnDegrees(15, 1);
@@ -81,10 +83,11 @@ void IRrun()
 	{
 		stop();
 		_delay_ms(100);
-		leftForwardsRightBack();
+		onlyRightForwards();
+		setSpeed(80);
 		_delay_ms(100);
 		stop();
-		TurnDegrees(15, 0);
+		//TurnDegrees(15, 0);
 	}
 	else
 	{
