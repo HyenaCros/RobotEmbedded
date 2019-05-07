@@ -21,38 +21,51 @@ void Challenge3()
 	//setSpeed(50);
 	
 	/*Testing for pivoting finding object*/
-	// 	while(1)
-	// 	{
-	// 		ultraSonicObservers();
-	// 		Serial0_config(115200, SERIAL_8N1);
-	// 		char held[100];
-	// 		int left = getDistanceLeft();
-	// 		int right = getDistanceRight();
-	// 		sprintf(held, "Left: %d Right: %d", left, right);
-	// 		Serial0_poll_print(held);
-	// 		_delay_ms(5000);
-	// 	}
+// 	 	while(1)
+// 	 	{
+// 	 		ultraSonicObservers();
+// 			 _delay_ms(60);
+// 	 		Serial0_config(115200, SERIAL_8N1);
+// 	 		char held[100];
+// 	 		int left = getDistanceLeft();
+// 	 		sprintf(held, "Distance: %d ", left);
+// 	 		Serial0_poll_print(held);
+// 	 		_delay_ms(4000);
+// 	 	}
 
-	//
+	
+	int objectDistance = 100;
+	int completed = 0;
+	int rotaryStart = getLeftRotaryCount();
 	while(1)
 	{
-		bool seeObject = false;
-		setSpeed(99);
-		leftForwardsRightBack();
-		
-		while(seeObject == false)
-		{
+		if (!completed) {
+			setSpeed(60);
+			leftForwardsRightBack();
 			ultraSonicObservers();
-			//_delay_ms(100);
-			int left = getDistanceLeft();
-			int right = getDistanceRight();
-			if((left < 5 && left > 0))
+			_delay_ms(70);
+			int object = getDistanceLeft();
+			if(object <= objectDistance && object > 3)
 			{
-				stop();
-				seeObject = true;
-				_delay_ms(1000);
+				objectDistance = object;
 			}
 		}
-		
+		else {
+			
+		}
 	}
+	
+	
+// 	setSpeed(60);
+// 	leftForwardsRightBack();
+// 	while(1)
+// 	{
+// 		ultraSonicObservers();
+// 		_delay_ms(70);
+// 		int distance = getDistanceLeft();
+// 		if(distance > 4 && distance < 50)
+// 		{
+// 			stop();
+// 		}
+// 	}
 }

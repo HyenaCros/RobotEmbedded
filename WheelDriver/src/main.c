@@ -23,8 +23,26 @@ int main (void)
 	RotarySetup();
 	IRsetup();
 	
+	//while(1)
+	//{
+	//	goForwards();
+	//	setSpeed(90);
+	//}
+	
 	//Challenge1();
 	//Challenge2();
 	//Challenge3();
-	Challenge4();
+	//Challenge4();
+	goForwards();
+	setSpeed(90);
+	while(1)
+	{
+		ultraSonicObservers();
+		_delay_ms(60);
+		int left = getDistanceLeft();
+		if(left < 5 && left > 0)
+		{
+			stop();
+		}
+	}
 }

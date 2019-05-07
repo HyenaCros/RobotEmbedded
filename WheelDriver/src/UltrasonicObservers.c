@@ -11,9 +11,8 @@
 #include <util/delay.h>
 #include <interrupt.h>
 
-static volatile double distanceLeft = 0;
-static volatile double distanceRight = 9;
-static volatile int leftPulse = 0;
+static volatile int distanceLeft = 0;
+static volatile unsigned int leftPulse = 0;
 static volatile int rightPulse = 0;
 // static volatile int leftInc = 0;
 // static volatile int rightInc = 0;
@@ -23,13 +22,6 @@ static volatile int avg_countR = 0;
 static volatile double avgL = 0;
 static volatile double avgR = 0;
 
-
-double getDistanceRight()
-{
-	int r = distanceRight;
-	distanceRight = 0;
-	return r;
-}
 double getDistanceLeft()
 {
 	int l = distanceLeft;
@@ -37,67 +29,44 @@ double getDistanceLeft()
 	return l;
 }
 
-
+int timerStart = 1;
 ISR(PCINT2_vect)//interrupt service routine when there is a change in logic level
 {
-	char CURRENT_STATE = PINK;
-	char changed = CURRENT_STATE ^ PCINT2_STATE;
-	
-	if(changed == 1)
-	{
-		if ((CURRENT_STATE & 1)==0)//when logic from HIGH to LOW
+	if (timerStart==0)//when logic from HIGH to LOW
 		{
 			TCCR4B=0;//disabling counter
 			leftPulse=TCNT4;//count memory is updated to integer
+			distanceLeft = leftPulse/9;
 			
-		    distanceLeft = ((double)leftPulse/148.0)/14.0;
+// 			Serial0_config(115200, SERIAL_8N1);
+// 			char held[100];
+// 			sprintf(held, "Distance: %d Pulse: %d", distanceLeft, leftPulse);
+// 			Serial0_poll_print(held);
+// 			_delay_ms(2000);
 			
-			avgL += distanceLeft;
-			avg_countL++;
+			/*
+			if(leftPulse > 0)
+			{
+				distanceLeft = leftPulse/34;
+				avgL += distanceLeft;
+				avg_countL++;
+			}
+		    
 			if (avg_countL == 5) {
 				distanceLeft = avgL / 5;	
 				avg_countL = 0;
 				avgL = 0;
 			}
+			*/
 			
 			TCNT4=0;//resetting the counter memory
-// 			leftInc=0;
+			timerStart = 1;
 		}
-		if ((CURRENT_STATE & 1)==1)//when logic change from LOW to HIGH
-		{
-			TCCR4B |=(1);//enabling counter
-// 			leftInc=1;
+		else//when logic change from LOW to HIGH
+		{	
+			TCCR4B |=(4);//enabling counter
+			timerStart = 0;
 		}
-	}
-	
-	else if(changed == 2)
-	{
-		if ((CURRENT_STATE & 2)==2)//when logic from HIGH to LOW
-		{
-			TCCR4B=0;//disabling counter
-			rightPulse=TCNT4;//count memory is updated to integer
-			
-			distanceRight = (rightPulse/148)/14;
-			avgR += distanceRight;
-			avg_countR++;
-			if (avg_countR == 5) {
-				distanceRight = avgR / 5;
-				avg_countR = 0;
-				avgR = 0;
-			}
-			
-			TCNT4=0;//resetting the counter memory
-// 			rightInc=0;
-		}
-
-		if ((CURRENT_STATE & 2)==2)//when logic change from LOW to HIGH
-		{
-			TCCR4B |= 1;//enabling counter
-// 			rightInc=1;
-		}
-	}
-	
-	PCINT2_STATE = CURRENT_STATE;
 }
 
 void setUpUltraSonic()
@@ -127,17 +96,22 @@ void setUpUltraSonic()
 
 void ultraSonicObservers()
 {
-	for (int i = 0; i < 5; i++) {
-		PORTF |= 0x01;
-		_delay_us(10);
-		PORTF &= ~0x01;
-		_delay_ms(4);
-	}
+	timerStart = 1;
+	TCNT4 = 0;
+	TCCR4B = 0;
+	PORTF |= 0x01;
+	_delay_us(5);
+	PORTF &= ~0x01;
 	
-	for (int j = 0; j < 5; j ++){
-		PORTF |= 0x02;
-		_delay_us(10);
-		PORTF &= ~0x02;
-		_delay_ms(4);
+	/*
+	for (int i = 0; i < 5; i++) {
+		timerStart = 1;
+		TCNT4 = 0;
+		TCCR4B = 0;
+		PORTF |= 0x01;
+		_delay_us(5);
+		PORTF &= ~0x01;
 	}
+	*/
+	
 }

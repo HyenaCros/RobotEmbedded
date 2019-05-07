@@ -28,7 +28,7 @@ void goStraightDistance(int cm, int forwards)
 		goBackwards();
 	}
 	
-	setSpeed(80);
+	setSpeed(90);
 	while(rightCurrent < cm)
 	{
 		rightCurrent = getRightRotaryCount() - startingRight;
